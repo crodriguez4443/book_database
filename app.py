@@ -186,15 +186,32 @@ def app():
                 the_book.price = edit_check('Price', the_book.price)
                 session.commit()
                 print('Book updated!')
-                time.wait(1.5)
+                time.sleep(1.5)
             elif sub_choice == '2':
                 session.delete(the_book)
                 session.commit()
                 print('Book deleted!')
-                time.wait(1.5)
+                time.sleep(1.5)
         elif choice == '4':
-            #book analysis
-            pass
+            #analysis
+            time.sleep(.5)
+            print("analyzing...")
+            time.sleep(.5)
+            oldest_book = session.query(Book).order_by(Book.published_date)[-1]
+            newest_book = session.query(Book).order_by(Book.published_date)[0]
+            total_books = session.query(Book).count()
+            python_books = session.query(Book).filter(Book.title.like('%Python%')).count()
+            most_expensive_book = session.query(Book).order_by(Book.price)[-1]
+            cheapest_book = session.query(Book).order_by(Book.price)[0]
+            print(f""" 
+            \n***** BOOK ANAYLSIS *****
+            \rOldest book: {oldest_book.title}
+            \rNewest book: {newest_book.title}
+            \rTotal books: {total_books}
+            \rPython books: {python_books}
+            \rMost expensive book: ${most_expensive_book.price/100}
+            \rCheapest book: ${cheapest_book.price/100}""")
+            input('---> PRESS ENTER TO RETURN TO THE MAIN MENU.')
         else:
             print('bye, you have exited')
             app_running = False
